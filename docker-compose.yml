@@ -1,0 +1,68 @@
+name: projet-devops
+
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: devops_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - devops-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  springapp:
+    image: ${DOCKERHUB_USER:-mahmoudmsolly}/mahmoudmsolly-5erpbi1-gestionprojets:${TAG:-latest}
+    build: ./backend
+    container_name: springapp
+    restart: unless-stopped
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/devops_db?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "8089:8080"   # 8080 on the host is used by Jenkins
+    networks:
+      - devops-net
+
+  frontend:
+    image: ${DOCKERHUB_USER:-mahmoudmsolly}/mahmoudmsolly-5erpbi1-gestionprojets-frontend:${TAG:-latest}
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - springapp
+    ports:
+      - "4200:80"
+    networks:
+      - devops-net
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: unless-stopped
+    depends_on:
+      - mysqldb
+    ports:
+      - "8082:8080"
+    networks:
+      - devops-net
+
+networks:
+  devops-net:
+    name: devops-net
+
+volumes:
+  mysql-data:

@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Spring Boot application (Actuator + Micrometer)
+  - job_name: springapp
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["springapp:8080"]
+
+  # Jenkins (requires the "Prometheus metrics" plugin)
+  - job_name: jenkins
+    metrics_path: /prometheus/
+    static_configs:
+      - targets: ["host.docker.internal:8080"]
