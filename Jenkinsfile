@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_USER = 'mahmoudmsolly'
+        DOCKERHUB_USER = 'mahmoudmsolly77'
         IMAGE_NAME     = 'mahmoudmsolly-5erpbi1-gestionprojets'
         BACKEND_IMAGE  = "${DOCKERHUB_USER}/${IMAGE_NAME}"
         FRONTEND_IMAGE = "${DOCKERHUB_USER}/${IMAGE_NAME}-frontend"

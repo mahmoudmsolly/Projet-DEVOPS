@@ -21,7 +21,7 @@ services:
       retries: 10
 
   springapp:
-    image: ${DOCKERHUB_USER:-mahmoudmsolly}/mahmoudmsolly-5erpbi1-gestionprojets:${TAG:-latest}
+    image: ${DOCKERHUB_USER:-mahmoudmsolly77}/mahmoudmsolly-5erpbi1-gestionprojets:${TAG:-latest}
     build: ./backend
     container_name: springapp
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
       - devops-net
 
   frontend:
-    image: ${DOCKERHUB_USER:-mahmoudmsolly}/mahmoudmsolly-5erpbi1-gestionprojets-frontend:${TAG:-latest}
+    image: ${DOCKERHUB_USER:-mahmoudmsolly77}/mahmoudmsolly-5erpbi1-gestionprojets-frontend:${TAG:-latest}
     build: ./frontend
     container_name: frontend
     restart: unless-stopped
