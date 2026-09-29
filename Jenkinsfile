@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Checkout GIT') {
             steps {
-                checkout scm
+                // The code is already fetched by "Declarative: Checkout SCM"
                 sh 'git log -1 --oneline'
             }
         }
